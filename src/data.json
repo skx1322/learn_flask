@@ -1,0 +1,12 @@
+{
+    "book": [
+        {
+            "id": "fe-123",
+            "bookname": "nerdanta elysiajs"
+        },
+        {
+            "id": "fe-456",
+            "bookname": "nerdanta reactjs"
+        }
+    ]
+}

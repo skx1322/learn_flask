@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python & Flask Roadmap</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-primary shadow">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">{{title}}</span>
+        </div>
+    </nav>
+
+    <header class="bg-white border-bottom py-5 mb-4">
+        <div class="container text-center">
+            <h1 class="fw-light">Flask Learning Path from {{user_name}}</h1>
+            <p class="lead text-muted">From Python basics to full-stack deployment.</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm roadmap-card" data-stage="1">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">01. Python Core</h5>
+                        <p class="card-text text-secondary">Variables, Loops, Dicts, and Decorators.</p>
+                        <span class="badge bg-success">Completed</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm roadmap-card" data-stage="2">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">02. Flask Basics</h5>
+                        <p class="card-text text-secondary">Routing, Jinja2 Templates, and Static Files.</p>
+                        <span class="badge bg-success">Completed</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm roadmap-card" data-stage="3">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">03. Databases</h5>
+                        <p class="card-text text-secondary">SQLAlchemy, Models, and Migrations.</p>
+                        <span class="badge bg-success">Completed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/index.js"></script>
+</body>
+</html>

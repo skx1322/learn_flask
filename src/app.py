@@ -1,10 +1,17 @@
 from data import serial
-from flask import Flask, request, send_file, render_template
+from flask import Flask, request, send_file, render_template, session
 from form import UserSchema
 from flask_pydantic import validate
 from operator import itemgetter
+from dotenv import load_dotenv
+from datetime import timedelta
+import os
+
+load_dotenv()
 
 app = Flask(__name__) 
+app.secret_key = os.getenv('SECRET_KEY')
+app.permanent_session_lifetime = timedelta(minutes=2)
 
 @app.route("/", methods=['GET'])
 def web():
@@ -19,19 +26,42 @@ def image(filename):
     
     return send_file(filePath, mimetype='image/jpeg')
 
-@app.route("/book", methods=['GET'])
+@app.route("/book", methods=['POST', 'GET'])
 def log():
-    query = request.args.get('name')
-    right_book = [obj for obj in serial if obj['id'] == query]
+    if request.method == "POST":
+        session.permanent = True
+        user = request.form["username"]
+        session["user"] = user
 
-    if not right_book:
-        return {"message": "Not found"}, 404
+        return {
+            "message": "Success", 
+            "data": f"Successfully login.",
+            "book": user
+        }, 200 
+    else:
+        if "user" in session: 
+            query = request.args.get('name')
+            right_book = [obj for obj in serial if obj['id'] == query]
 
+            if not right_book:
+                return {"message": "Not found"}, 404
+
+            return {
+                "message": "Success", 
+                "data": f"Query: {query}.",
+                "book": right_book
+            }, 200
+        return {
+            "message": "Failed", 
+            "data": f"User not login.",
+        }, 401
+
+@app.route("/logout", methods=['POST'])
+def logout():
+    session.pop("user", None)
     return {
-        "message": "Success", 
-        "data": f"Query: {query}",
-        "book": right_book
-    }, 200
+    }, 204
+
 
 @app.route("/create", methods=['POST'])
 @validate(form=UserSchema)

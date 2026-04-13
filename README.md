@@ -25,3 +25,8 @@ py -m venv .venv
 ```
 deactivate
 ```
+
+## To Run Flask
+```
+flask --app .\src\app.py run --debug
+```

@@ -6,12 +6,21 @@ from operator import itemgetter
 from dotenv import load_dotenv
 from datetime import timedelta
 import os
+from model import db, UserModel
 
 load_dotenv()
 
 app = Flask(__name__) 
 app.secret_key = os.getenv('SECRET_KEY')
 app.permanent_session_lifetime = timedelta(minutes=2)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fuhua.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 @app.route("/", methods=['GET'])
 def web():
@@ -66,12 +75,42 @@ def logout():
 @app.route("/create", methods=['POST'])
 @validate(form=UserSchema)
 def create_user(form: UserSchema):
-    username, email, age = itemgetter("username", "email", "age")(form.model_dump())
-    return {"message": "Success", "data": {
-        "name": username,
-        "email": email,
-        "age": age,
-    }}, 201
+    new_user = UserModel(
+        username=form.username,
+        email=form.email,
+        # for learning purpose, there is no hashing at the moment
+        password=form.password,
+        age=form.age
+    )
+
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+        return {"message": "Success", "id": new_user.id}, 201
+    except Exception as e:
+        db.session.rollback()
+        return {"message": "Database Error", "id": str(e)}, 500
+    
+@app.route("/user", methods=['GET'])
+def get_user():
+        # for learning purpose, there is no hashing at the moment
+    users = UserModel.query.all()
+
+    output = []
+    for user in users:
+        user_data = {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "age": user.age
+        }
+        output.append(user_data)
+
+    return {
+        "message": "Success",
+        "data": output,
+        "total": len(output)
+    }
 
 
 if __name__=='__main__': 
